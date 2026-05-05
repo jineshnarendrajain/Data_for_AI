@@ -1,127 +1,76 @@
-# Data Quality Audit — [primary dataset name]
-
-> Honest assessment of the dataset's fitness for YOUR brief, based on what
-> profiling revealed. Not a generic data-quality report — specifically
-> answers "can we use this for what we're trying to do?"
->
-> Save as `docs/data-quality-audit.md` in your repo.
+# Data Quality Audit
 
 ---
 
-## Dataset under audit
+## Dataset Overview
 
-- **Dataset:** 
-- **Profiling notebook:** `notebooks/01-data-profiling.ipynb`
-- **Audit performed by:** [name(s)]
-- **Date:** [YYYY-MM-DD]
+Two primary datasets were analysed:
 
----
+* Landsat 8 Surface Temperature (LST) for heat patterns
+* Sentinel-2 NDVI for vegetation distribution
 
-## Gaps
-
-### Temporal gaps
-
-*Date ranges where data is missing, sparse, or unreliable. Be specific —
-"there's a gap from 2020-03 to 2020-06" not "some data is missing."*
-
-- 
-
-### Spatial gaps
-
-*Locations or regions where coverage is missing, sparse, or unreliable.*
-
-- 
-
-### Field-level gaps
-
-*Which columns / variables are unreliable? What fraction is missing? Are
-the missing values random or structured?*
-
-| Field | % missing | Pattern of missingness | Implication |
-|---|---|---|---|
-|  |  |  |  |
-|  |  |  |  |
+Both datasets were filtered for Manhattan during peak summer (June–August 2018).
 
 ---
 
-## Anomalies found during profiling
+## Key Findings
 
-*List each anomaly discovered, with a one-sentence diagnosis. Include
-suspicious values (e.g. negative PM2.5 readings, dates in 2099, sensor IDs
-of zero).*
+### 1. Land Surface Temperature (LST)
 
-| # | Anomaly | Diagnosis | Action taken |
-|---|---|---|---|
-| 1 |  |  |  |
-| 2 |  |  |  |
-| 3 |  |  |  |
-| 4 |  |  |  |
-| 5 |  |  |  |
+* Minimum: ~10.3°C
+* Mean: ~30.7°C
+* Maximum: ~49.2°C
+
+These values indicate strong urban heat island conditions, with extreme hotspots likely associated with dense built-up areas such as commercial zones and transportation infrastructure.
 
 ---
 
-## Bias check
+### 2. Vegetation (NDVI)
 
-*From the bias taxonomy in the lecture: selection / measurement / coverage /
-temporal drift / label bias. Which apply to this dataset?*
+* Minimum: ~-0.27
+* Mean: ~0.09
+* Maximum: ~0.69
 
-- **Selection bias:** 
-- **Measurement bias:** 
-- **Coverage bias:** 
-- **Temporal drift / non-stationarity:** 
-- **Label bias** *(if applicable):* 
+NDVI values suggest that Manhattan has generally low vegetation coverage, with high NDVI values limited to specific areas such as Central Park and smaller green spaces.
 
 ---
 
-## Fitness for OUR brief
+### 3. Relationship Between LST and NDVI
 
-*For each sub-question of your problem brief, can this dataset answer it?*
+A clear inverse relationship is observed:
 
-- **Sub-question 1:** [paste sub-question]
-  - **Answer:** Yes / Partial / No
-  - **Why:** 
+* Areas with low NDVI correspond to high LST
+* Areas with high NDVI correspond to lower LST
 
-- **Sub-question 2:** [paste sub-question]
-  - **Answer:** Yes / Partial / No
-  - **Why:** 
-
-- **Sub-question 3:** [paste sub-question]
-  - **Answer:** Yes / Partial / No
-  - **Why:** 
+This supports the hypothesis that vegetation plays a significant role in reducing surface temperatures in urban environments.
 
 ---
 
-## Decisions
+## Data Limitations
 
-- **What we WILL use this dataset for:**
-  
-- **What we will NOT use this dataset for:** *(at least 2 specific things)*
-  1. 
-  2. 
-
-- **What additional source(s) we'd need to fill the gaps:**
-  
+* LST represents surface temperature, not human thermal comfort
+* NDVI is a proxy for vegetation and does not capture canopy density or shading effects
+* Temporal scope is limited to summer 2018 and does not represent long-term trends
+* Satellite revisit cycles and cloud filtering may introduce sampling bias
+* Spatial resolution differences (Landsat ~30m vs Sentinel ~10m) may affect alignment
 
 ---
 
-## Implications for the brief
+## Data Fitness for Purpose
 
-*Does this audit force a change to the problem brief? If yes, document the
-change in `problem-brief-v2.md` and link from here.*
+Despite limitations, the datasets are suitable for:
 
-- 
+* Identifying relative heat hotspots
+* Comparing vegetation influence on surface temperature
+* Supporting prioritisation of heat mitigation zones
+
+They are not suitable for:
+
+* Detailed microclimate analysis
+* Direct human thermal comfort assessment
 
 ---
 
-## Per-team-member contributions
+## Conclusion
 
-*Each team member must write at least one paragraph in this file. Use this
-section.*
-
-### [Name]
-
-### [Name]
-
-### [Name]
-
-### [Name]
+The datasets provide a reliable basis for identifying high-risk heat zones in Manhattan and understanding the role of vegetation in mitigating urban heat, with clearly defined limitations that must be considered in interpretation.

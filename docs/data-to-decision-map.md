@@ -1,76 +1,48 @@
 # Data → Decision Map
 
-> The bridge from your problem brief to your data inventory. For each
-> sub-question in the brief, which dataset answers it, and at what
-> confidence?
->
-> If any sub-question has NO data backing it, you have two choices:
-> 1. Find a new source.
-> 2. Revise the brief (`problem-brief-v2.md`).
->
-> There is no third option called "we'll figure it out later."
->
-> Save as `docs/data-to-decision-map.md` in your repo.
-
 ---
 
 ## The map
 
 | Brief sub-question | Primary data source | Secondary source | Confidence (H/M/L) | Notes |
 |---|---|---|---|---|
-| Sub-Q 1: [paste] | | | | |
-| Sub-Q 2: [paste] | | | | |
-| Sub-Q 3: [paste] | | | | |
-| Sub-Q 4: [paste] | | | | |
-
-### Confidence scale
-
-- **HIGH** — adopted dataset(s) directly answer the question at appropriate
-  resolution and coverage. We can defend this in front of a reviewer.
-- **MEDIUM** — adopted dataset(s) answer the question with caveats
-  (resolution mismatch, gap, proxy required). Defensible with documentation.
-- **LOW** — partial answer only; will require synthesis, modeling
-  assumptions, or proxies. Mark as a known limitation.
-- **NONE** — no data backing exists. Either find a new source or revise
-  the brief.
+| Sub-Q 1: How has land surface temperature (LST) varied spatially across Manhattan during peak summer periods over the past 10–15 years? | Landsat Surface Temperature | — | MEDIUM | Direct LST measurement with long historical coverage; limited by revisit frequency and cloud gaps |
+| Sub-Q 2: Which street-block-level zones in Manhattan exhibit the highest land surface temperature (LST) during peak summer conditions? | Landsat Surface Temperature | — | MEDIUM | Spatial resolution (~30–100m) allows block-level approximation but not exact precision |
+| Sub-Q 3: How does green cover (vegetation) influence land surface temperature (LST) across street-block-level zones in Manhattan? | Sentinel-2 NDVI | Landsat Surface Temperature | MEDIUM | NDVI is a proxy for vegetation; relationship with LST is correlational, not causal |
+| Sub-Q 4: Which street-block-level zones in Manhattan should be prioritised for heat mitigation based on high land surface temperature (LST) and low green cover? | Landsat Surface Temperature | Sentinel-2 NDVI (NYC Heat Vulnerability Index for validation) | MEDIUM | Priority derived using rule-based combination (high LST + low NDVI); simplified model without full thermal comfort factors |
 
 ---
 
 ## Coverage check
 
 - **Sub-questions with HIGH confidence:**
-  - 
+  - None
 
 - **Sub-questions with MEDIUM confidence:**
-  - 
+  - All four sub-questions
 
 - **Sub-questions with LOW confidence:**
-  - 
+  - None
 
 - **Sub-questions with NO data backing:**
-  - 
+  - None
 
 ---
 
 ## What this means for the brief
 
-*If any sub-question has NONE or LOW confidence, what's the plan?*
+- [ ] Find a new source — not required; all sub-questions are supported by available datasets  
 
-- [ ] Find a new source — list candidates here:
-  - 
+- [ ] Revise the brief — not required at this stage  
 
-- [ ] Revise the brief — describe the change here, then commit it to
-      `problem-brief-v2.md`:
-  - 
+- [x] Accept MEDIUM confidence as a documented limitation  
 
-- [ ] Accept LOW confidence as a documented limitation — write the
-      limitation statement here, then add it to `data-quality-audit.md`
-      and to the future model card:
-  - 
+**Limitation statement:**
+All sub-questions rely on satellite-derived proxies (LST and NDVI), which do not fully capture human thermal comfort or microclimate dynamics (e.g., humidity, wind, shading). Results should be interpreted as relative heat exposure patterns rather than precise thermal comfort measurements.
 
 ---
 
 ## Sign-off
 
-**Team:** [names]
-**Last updated:** [YYYY-MM-DD]
+**Team:** Dhruvil Mahendra Bhanushali, Jinesh Narendra Jain, Rudra Mhatre, Sumit Sudhir Shingne  
+**Last updated:** 2026-05-04

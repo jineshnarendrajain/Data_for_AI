@@ -1,136 +1,153 @@
 # System Sketch v0
 
-> One-page diagram + descriptions. Forces you to think system, not script.
->
-> Master's-level architecture and design students aren't shipping a
-> notebook script — you're shipping a **system** a professional can use.
-> Drawing the system surfaces the seams that don't yet have data, the
-> arrows where logic is missing, and the boundaries that protect you
-> from scope creep.
->
-> Save as `docs/system-sketch-v0.md` in your repo. GitHub renders Mermaid
-> blocks natively in markdown — no extra tools needed. (Excalidraw or
-> hand-drawn is also fine — just embed the image.)
+---
+
+## Overview
+
+This system processes satellite-derived datasets to identify heat exposure hotspots in Manhattan and prioritise zones for heat mitigation interventions.
+
+The pipeline integrates land surface temperature (LST) and vegetation data (NDVI) to generate spatially explicit outputs that support decision-making.
 
 ---
 
-## The diagram
+## Pipeline Diagram
 
 ```mermaid
-flowchart LR
-    subgraph sources [Data sources]
-        A[Source 1]
-        B[Source 2]
-        C[Source 3]
-    end
-    subgraph processing [Processing]
-        D[Step 1: ...]
-        E[Step 2: ...]
-        F[Step 3: ...]
-    end
-    subgraph output [Output]
-        G[What the user sees]
-    end
-    A --> D
-    B --> D
-    C --> E
-    D --> E --> F --> G
+graph TD
+
+A[Define Study Area: Manhattan] --> B[Load Landsat LST Data]
+A --> C[Load Sentinel-2 NDVI Data]
+
+B --> D[Filter Summer Period + Cloud Filtering]
+C --> E[Filter Summer Period + Cloud Masking]
+
+D --> F[Compute LST (°C)]
+E --> G[Compute NDVI]
+
+F --> H[Aggregate LST (Mean)]
+G --> I[Aggregate NDVI (Median)]
+
+H --> J[Spatial Alignment]
+I --> J
+
+J --> K[Combine LST + NDVI]
+
+K --> L[Apply Rule-Based Classification]
+L --> M[Identify High-Risk Zones]
+
+M --> N[Validate with NYC Heat Vulnerability Index]
+
+N --> O[Output Map / Priority Zones]
 ```
 
-> **Tip:** every box should have a verb. Every arrow should be a contract
-> (this thing flows from here to there in this format).
+---
+
+## Step-by-Step Explanation
+
+### 1. Study Area Definition
+
+* Manhattan boundary is extracted using administrative data
+* Ensures analysis is restricted to relevant geographic extent
 
 ---
 
-## Component descriptions
+### 2. Data Ingestion
 
-### Sources *(left side — what comes in)*
+**Landsat (LST):**
 
-- **Source 1:** [name]
-  - What it provides: 
-  - Which sub-question(s) it serves: 
-  - Format / cadence: 
-  - Datasheet: `docs/datasheets/<slug>.md`
+* Source: Landsat 8 Collection 2
+* Thermal band used to derive land surface temperature
 
-- **Source 2:** [name]
-  - What it provides: 
-  - Which sub-question(s) it serves: 
-  - Format / cadence: 
-  - Datasheet: 
+**Sentinel-2 (NDVI):**
 
-- **Source 3:** [name]
-  - What it provides: 
-  - Which sub-question(s) it serves: 
-  - Format / cadence: 
-  - Datasheet: 
-
-### Processing *(middle — what happens)*
-
-- **Step 1:** 
-  - **Input:** 
-  - **Output:** 
-  - **Transformation:** 
-
-- **Step 2:** 
-  - **Input:** 
-  - **Output:** 
-  - **Transformation:** 
-
-- **Step 3:** 
-  - **Input:** 
-  - **Output:** 
-  - **Transformation:** 
-
-### Output *(right side — what the user sees)*
-
-- **Form:** *(dashboard / report / notebook tool / web app / Grasshopper
-  component / API)*
-- **What the user does with it:** *(one sentence)*
-- **Cross-reference:** see `output-sketch-v0.md` for the user-facing detail.
+* Source: Sentinel-2 Surface Reflectance
+* Red and Near-Infrared bands used to compute NDVI
 
 ---
 
-## Boundaries
+### 3. Data Filtering
 
-### In scope
+* Temporal filtering: June–August (peak summer)
+* Cloud filtering applied:
 
-*What this system explicitly does. Use bullets that name capabilities.*
-
-- 
-- 
-- 
-
-### Out of scope
-
-*What this system explicitly does NOT do. This protects you from scope creep.*
-
-- 
-- 
-- 
+  * Landsat: cloud cover metadata
+  * Sentinel-2: SCL-based masking
 
 ---
 
-## Open seams
+### 4. Feature Extraction
 
-*Where in the diagram is data missing? Where is logic uncertain? Name 1–3
-seams. These are tomorrow's problems made visible.*
-
-- **Seam 1:** 
-  - Why it's a seam: 
-  - Plan: 
-
-- **Seam 2:** 
-  - Why it's a seam: 
-  - Plan: 
-
-- **Seam 3:** 
-  - Why it's a seam: 
-  - Plan: 
+* LST computed from thermal band and converted to °C
+* NDVI computed using normalized difference formula
 
 ---
 
-## Sign-off
+### 5. Aggregation
 
-**Team:** [names]
-**Drawn by:** [name]
-**Last updated:** [YYYY-MM-DD]
+* LST aggregated using mean (captures overall heat pattern)
+* NDVI aggregated using median (reduces noise and cloud artifacts)
+
+---
+
+### 6. Data Integration
+
+* LST and NDVI layers are spatially aligned
+* Combined to create a joint dataset representing heat + vegetation
+
+---
+
+### 7. Classification Logic
+
+A rule-based approach is used:
+
+* High LST + Low NDVI → High-risk zone
+* Low LST + High NDVI → Low-risk zone
+
+This provides a simplified but interpretable method for identifying priority areas.
+
+---
+
+### 8. Validation
+
+* Results are compared with NYC Heat Vulnerability Index
+* Used as a reference to check consistency with known vulnerable areas
+
+---
+
+### 9. Output
+
+* Spatial map highlighting:
+
+  * High-risk zones
+  * Moderate zones
+  * Low-risk zones
+
+* Enables planners to prioritise interventions such as:
+
+  * tree planting
+  * shading
+  * material changes
+
+---
+
+## Assumptions
+
+* LST is a valid proxy for urban heat intensity
+* NDVI adequately represents vegetation presence
+* Summer conditions represent peak thermal stress
+* Rule-based classification is sufficient for prioritisation
+
+---
+
+## Limitations
+
+* Does not account for humidity, wind, or human thermal comfort
+* Limited temporal scope (single season snapshot)
+* Spatial resolution constraints (30m vs 10m)
+* Simplified classification logic (no predictive modeling)
+
+---
+
+## Conclusion
+
+The system provides a transparent and reproducible pipeline for identifying urban heat hotspots and prioritising intervention zones using satellite data. While simplified, it offers actionable insights for urban planning and climate resilience strategies.

@@ -1,101 +1,94 @@
 # Output Sketch v0
 
-> One page. Hand-drawn is fine. This is what the user sees at the end of
-> Session 7.
->
-> By Session 7 you are not delivering a graph. You are delivering something
-> a professional can act on. Start sketching what that thing looks like
-> today, even if it changes 5 times.
->
-> Not a product spec. A sketch. The point: you can't know what data you
-> need until you know what you're delivering.
->
-> Save as `docs/output-sketch-v0.md` in your repo.
-
 ---
 
 ## What is the final output?
 
-*Choose one form and describe it in one sentence.*
-
-- [ ] Dashboard *(interactive web UI with maps / filters / tables)*
-- [ ] Annotated map / report *(static, designed to be read)*
-- [ ] Notebook tool *(Jupyter notebook with parameter cells, designed to be
-      opened, tweaked, re-run by the user)*
-- [ ] Web tool / app
-- [ ] Grasshopper component / Rhino plugin
-- [ ] API service
-- [ ] Other: 
+- [x] Dashboard (interactive map interface)
 
 **One-sentence description of the output:**
 
-> 
+An interactive spatial decision-support map that visualises heat exposure risk across Manhattan using land surface temperature (LST) and vegetation (NDVI) data, enabling identification of priority zones for heat mitigation.
 
 ---
 
 ## Who is the user?
 
-*Be specific. A person with a job title and a moment of use. Not a category
-("urban planners") — a person ("a capital planning analyst at the Barcelona
-Urban Resilience Office, on Tuesday morning, deciding which 5 buildings get
-priority retrofit funding").*
-
-> 
+A climate resilience analyst at a New York City municipal agency, working on urban heat mitigation planning and resource allocation.
 
 ### What does the user already know?
 
-*What's their professional context? What tools do they already use?*
-
-- 
+- Familiar with GIS-based spatial data  
+- Understands urban heat island concepts  
+- Uses maps and data to support policy decisions  
 
 ### What does the user NOT know?
 
-*What's the gap your output fills?*
-
-- 
+- Exact street-block-level heat hotspots  
+- Where vegetation is insufficient relative to heat  
+- Which specific zones should be prioritised for intervention  
 
 ---
 
 ## The top 3 actions this output enables
 
-*Each action should be concrete: a thing the user does after looking at
-the output. "Raises awareness" is not an action. "Adds 3 buildings to
-the shortlist" is.*
-
-1. 
-2. 
-3. 
+1. Identify the top 5–10 highest heat-risk zones in Manhattan  
+2. Compare heat levels with vegetation distribution across locations  
+3. Select priority areas for targeted interventions such as tree planting or shading  
 
 ---
 
-## Sketch
+## Sketch (layout description)
 
-*Embed an image. Hand-drawn on paper, photographed. Figma wireframe.
-Excalidraw. Screenshot of an analogous existing tool with annotations.
-Whatever — one image, one page.*
+- **Top:** Title + legend (heat scale and vegetation scale)  
+- **Center:** Interactive map displaying Manhattan  
+- **Layers:**
+  - LST heat map (blue → red)
+  - NDVI vegetation map (brown → green)
+  - Heat risk classification (green → yellow → red)  
+- **Side panel (optional):**
+  - Toggle layers on/off  
+  - Display selected point values (LST, NDVI, risk score)  
+- **Bottom (optional):**
+  - List of top 5–10 priority zones  
 
-![Output sketch](./sketches/output-sketch-v0.png)
+---
 
-> If you're not ready for an image yet, write a 4-bullet description of the
-> visual layout: what's at the top, the center, the side panel, the bottom.
+## Example Output (Derived Results)
+
+The system identifies high-risk zones using a rule-based combination of high LST and low NDVI.
+
+### Top Priority Zones (Sample)
+
+| Rank | Latitude | Longitude | Risk Score |
+|---|---|---|---|
+| 1 | 40.7103 | -73.9851 | 1.09 |
+| 2 | 40.7436 | -73.9949 | 0.98 |
+| 3 | 40.7449 | -73.9762 | 0.95 |
+| 4 | 40.7183 | -73.9921 | 0.94 |
+| 5 | 40.7542 | -73.9872 | 0.92 |
+
+### Interpretation
+
+- High-risk zones are concentrated in dense urban areas with low vegetation  
+- Lower Manhattan and Midtown emerge as priority intervention zones  
+- These areas are dominated by impervious surfaces such as concrete and asphalt  
 
 ---
 
 ## What this output is NOT
 
-*Two bullets. Protects against scope creep. Be honest.*
-
-- 
-- 
+- A real-time monitoring system  
+- A full thermal comfort model (does not include humidity, wind, or shading effects)  
 
 ---
 
 ## What would make a user trust this output?
 
-*One bullet. Forces you to think about uncertainty communication early —
-this gets revisited in Session 7.*
-
-- 
+Clear communication of:
+- Data sources (Landsat, Sentinel-2, NYC datasets)  
+- Methodology (rule-based classification)  
+- Limitations (proxy-based analysis and resolution constraints)  
 
 ---
 
@@ -103,18 +96,32 @@ this gets revisited in Session 7.*
 
 | Seminar artifact | How it feeds into this output |
 |---|---|
-| Problem brief (v2) | The decision this output supports |
-| Datasheets | Provenance shown to the user (citation, source, license) |
-| Quality audit | Limitations shown to the user (what to trust, what not to) |
-| Decision map | The questions this output answers |
-| System sketch | The pipeline behind this output |
-| (Future) Model card | What the model does, doesn't, and might fail at |
-| (Future) Failure gallery | The "known failures" disclosure |
+| Problem brief (v2) | Defines the decision: prioritising heat mitigation zones |
+| Datasheets | Provide data source credibility and transparency |
+| Quality audit | Explains limitations and uncertainty |
+| Decision map | Links questions to datasets |
+| System sketch | Describes how the output is generated |
+| (Future) Model card | Documents model logic and assumptions |
+| (Future) Failure gallery | Highlights known limitations and edge cases |
+
+---
+
+## Limitations in Output
+
+- Uses satellite-derived proxies (LST, NDVI), not direct thermal comfort measurements  
+- Hotspots are pixel-based approximations of street-block conditions  
+- Temporal scope limited to selected summer period  
+- Does not include socio-economic or behavioural factors  
+
+---
+
+## Conclusion
+
+The output provides a clear, interpretable, and actionable interface for identifying urban heat risk zones in Manhattan. It enables data-driven prioritisation of interventions, supporting urban climate resilience planning with transparent assumptions and limitations.
 
 ---
 
 ## Sign-off
 
-**Team:** [names]
-**Sketched by:** [name]
-**Last updated:** [YYYY-MM-DD]
+**Team:** Dhruvil Mahendra Bhanushali, Jinesh Narendra Jain, Rudra Mhatre, Sumit Sudhir Shingne  
+**Last updated:** 2026-05-04
