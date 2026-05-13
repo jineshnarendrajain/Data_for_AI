@@ -1,78 +1,69 @@
-# Problem Brief v2 — [Your project name]
+# Problem Brief v2 — Urban Vegetation Health & Environmental Risk Mapping
 
 > Phase-1 loopback artifact. After today's data understanding work, does your
 > Session 1 brief still hold? CRISP-DM is iterative — phase 2 routinely sends
 > you back to phase 1 to revise the question. That's not failure; that's the
 > process working correctly.
->
-> Save this file as `docs/problem-brief-v2.md` in your repo. If you revise the
-> brief, also update `docs/problem-brief.md` to reflect the new working version.
 
 ---
 
 ## Was v1 revised? (yes / no)
 
-[ ]
+Yes
 
 ## What did the data reveal?
 
-*2–4 specific bullets. Not "we learned a lot." Specific findings.*
-
-> Examples:
-> - *"ERA5 at 30km resolution can't support per-block claims; we'd need to
->   downscale or pair with sensor data."*
-> - *"There is no public source for indoor temperature in Barcelona; we need
->   a proxy (energy certificates? building age?) or to revise the question."*
-> - *"PurpleAir's geographic skew toward wealthy neighborhoods means our
->   air-quality map systematically under-represents working-class areas."*
-
-- 
-- 
-- 
-- 
+- Sentinel-2 imagery provides sufficient spatial resolution for neighborhood-scale vegetation analysis, but not for individual tree-level assessment.
+- NDVI values are strongly affected by cloud cover, atmospheric conditions, and seasonal variation, requiring careful filtering and temporal consistency.
+- Temporal comparisons between datasets from different seasons can produce misleading vegetation trends if acquisition periods are not normalized.
+- Some urban areas with dense built environments naturally produce low NDVI values, meaning low NDVI should not automatically be treated as anomalous or erroneous.
 
 ---
 
 ## What changed in the brief
 
-For each, either describe the change or explain why no change was needed.
-
 ### Decision
 
-- **Was:** 
-- **Now:** 
+- **Was:** Identify vegetation and environmental conditions across the study area.
+- **Now:** Support identification and prioritization of urban zones with declining vegetation health and increased environmental vulnerability using cleaned NDVI-derived indicators.
 
 ### User
 
-- **Was:** 
-- **Now:** 
+- **Was:** General users interested in environmental analysis.
+- **Now:** Urban planners, environmental analysts, and municipal decision-makers requiring interpretable geospatial evidence for vegetation and environmental risk assessment.
 
 ### Success criteria
 
-- **Was:** 
+- **Was:** Produce NDVI maps and environmental analysis outputs.
 - **Now:** 
+  - Produce a reproducible NDVI preprocessing and cleaning pipeline.
+  - Generate spatially and temporally consistent NDVI datasets from Sentinel-2 imagery.
+  - Document all preprocessing assumptions, cleaning decisions, and limitations.
+  - Produce outputs suitable for downstream spatial/environmental modeling and decision-support workflows.
 
 ### Sub-questions
 
-- **Was:** 
+- **Was:** How does vegetation vary across the study area?
 - **Now:** 
+  - Which urban areas consistently exhibit low vegetation health?
+  - How do temporal and seasonal variations affect NDVI interpretation?
+  - Which preprocessing steps most strongly influence NDVI reliability?
+  - How can NDVI-derived indicators support environmental risk assessment?
 
 ### Out of scope
 
 *New additions, given data limits:*
 
-- 
-- 
+- Individual tree health assessment at fine-grain scale.
+- Direct inference of human thermal comfort or indoor environmental conditions solely from NDVI values.
 
 ---
 
 ## What we still don't know
 
-*2–3 open questions for Session 3.*
-
-- 
-- 
-- 
+- What temporal aggregation strategy produces the most stable NDVI representation for the study area.
+- How strongly cloud masking and atmospheric correction affect downstream NDVI consistency.
+- Whether additional auxiliary datasets will be required to strengthen environmental risk interpretation.
 
 ---
 
