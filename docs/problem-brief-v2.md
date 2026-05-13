@@ -72,6 +72,6 @@ Yes
 The full revised brief lives in `docs/problem-brief.md` (overwritten if revised).
 This file (`problem-brief-v2.md`) is the changelog explaining *why*.
 
-**Team:** [names]
-**Committed by:** [name]
-**Date:** [YYYY-MM-DD]
+**Team:** Dhruvil,Jinesh,Rudra,Sumit
+**Committed by:** Jinesh
+**Date:** 13/05/2026
