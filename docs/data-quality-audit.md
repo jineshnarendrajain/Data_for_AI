@@ -4,12 +4,12 @@
 
 ## Dataset Overview
 
-Two primary datasets were analysed:
+Two satellite-derived datasets were analysed for Manhattan during peak summer conditions (June–August 2018):
 
-* Landsat 8 Surface Temperature (LST) for heat patterns
-* Sentinel-2 NDVI for vegetation distribution
+* Landsat 8 Land Surface Temperature (LST)
+* Sentinel-2 NDVI (Normalized Difference Vegetation Index)
 
-Both datasets were filtered for Manhattan during peak summer (June–August 2018).
+The datasets were processed using temporal filtering, cloud filtering/masking, spatial clipping, and aggregation techniques to generate neighbourhood-scale environmental indicators.
 
 ---
 
@@ -17,42 +17,47 @@ Both datasets were filtered for Manhattan during peak summer (June–August 2018
 
 ### 1. Land Surface Temperature (LST)
 
+Observed LST statistics:
+
 * Minimum: ~10.3°C
 * Mean: ~30.7°C
 * Maximum: ~49.2°C
 
-These values indicate strong urban heat island conditions, with extreme hotspots likely associated with dense built-up areas such as commercial zones and transportation infrastructure.
+The results indicate strong spatial variation in surface temperature across Manhattan, with elevated temperatures concentrated in dense built-up urban areas and transportation corridors.
 
 ---
 
-### 2. Vegetation (NDVI)
+### 2. Vegetation Distribution (NDVI)
+
+Observed NDVI statistics:
 
 * Minimum: ~-0.27
 * Mean: ~0.09
 * Maximum: ~0.69
 
-NDVI values suggest that Manhattan has generally low vegetation coverage, with high NDVI values limited to specific areas such as Central Park and smaller green spaces.
+NDVI values indicate generally low vegetation density across much of Manhattan, with higher vegetation concentrations primarily located in Central Park and smaller urban green spaces.
 
 ---
 
 ### 3. Relationship Between LST and NDVI
 
-A clear inverse relationship is observed:
+A consistent inverse spatial relationship was observed between vegetation density and land surface temperature:
 
-* Areas with low NDVI correspond to high LST
-* Areas with high NDVI correspond to lower LST
+* Areas with relatively low NDVI values generally correspond to elevated LST values
+* Areas with higher NDVI values generally correspond to lower observed LST values
 
-This supports the hypothesis that vegetation plays a significant role in reducing surface temperatures in urban environments.
+This suggests that vegetation density is spatially associated with reduced surface temperature intensity across the study area. However, the relationship should be interpreted as correlational rather than causal.
 
 ---
 
 ## Data Limitations
 
-* LST represents surface temperature, not human thermal comfort
-* NDVI is a proxy for vegetation and does not capture canopy density or shading effects
-* Temporal scope is limited to summer 2018 and does not represent long-term trends
-* Satellite revisit cycles and cloud filtering may introduce sampling bias
-* Spatial resolution differences (Landsat ~30m vs Sentinel ~10m) may affect alignment
+* LST represents land surface thermal conditions rather than full human thermal comfort
+* NDVI is a vegetation proxy and does not directly measure canopy structure, shading performance, or ecological quality
+* Temporal scope is limited to Summer 2018 and does not support long-term trend analysis or forecasting
+* Cloud contamination and atmospheric variability may introduce inconsistencies despite filtering procedures
+* Spatial resolution differences between Landsat (~30m) and Sentinel-2 (~10m) may affect pixel-level alignment
+* Satellite-derived observations cannot fully capture street-level microclimate variability
 
 ---
 
@@ -60,17 +65,20 @@ This supports the hypothesis that vegetation plays a significant role in reducin
 
 Despite limitations, the datasets are suitable for:
 
-* Identifying relative heat hotspots
-* Comparing vegetation influence on surface temperature
-* Supporting prioritisation of heat mitigation zones
+* Identifying relative urban thermal hotspot patterns
+* Comparing spatial variation in vegetation density
+* Analysing relationships between vegetation distribution and surface temperature
+* Supporting neighbourhood-scale urban heat mitigation prioritisation
 
-They are not suitable for:
+The datasets are not suitable for:
 
-* Detailed microclimate analysis
-* Direct human thermal comfort assessment
+* Human physiological heat stress analysis
+* Detailed microclimate simulation
+* Building-scale or street-scale thermal modelling
+* Predictive climate forecasting
 
 ---
 
 ## Conclusion
 
-The datasets provide a reliable basis for identifying high-risk heat zones in Manhattan and understanding the role of vegetation in mitigating urban heat, with clearly defined limitations that must be considered in interpretation.
+The datasets provide a reliable and interpretable basis for neighbourhood-scale urban thermal hotspot analysis in Manhattan. Landsat-derived LST enables identification of elevated surface temperature zones, while Sentinel-2 NDVI provides contextual information about vegetation distribution. Although the analysis relies on satellite-derived proxy variables with known limitations, the datasets are appropriate for relative spatial comparison and urban heat mitigation planning support.

@@ -4,9 +4,11 @@
 
 ## Overview
 
-This system processes satellite-derived datasets to identify heat exposure hotspots in Manhattan and prioritise zones for heat mitigation interventions.
+This system processes satellite-derived environmental datasets to identify neighbourhood-scale urban thermal hotspot patterns across Manhattan.
 
-The pipeline integrates land surface temperature (LST) and vegetation data (NDVI) to generate spatially explicit outputs that support decision-making.
+The analytical workflow integrates Land Surface Temperature (LST) and vegetation density indicators (NDVI) to support spatial prioritisation of urban heat mitigation interventions.
+
+The system is designed as a transparent and reproducible geospatial analysis pipeline rather than a predictive machine learning system.
 
 ---
 
@@ -15,29 +17,29 @@ The pipeline integrates land surface temperature (LST) and vegetation data (NDVI
 ```mermaid
 graph TD
 
-A[Define Study Area: Manhattan] --> B[Load Landsat LST Data]
-A --> C[Load Sentinel-2 NDVI Data]
+A[Define Study Area: Manhattan] --> B[Load Landsat 8 LST Data]
+A --> C[Load Sentinel-2 Surface Reflectance Data]
 
 B --> D[Filter Summer Period + Cloud Filtering]
 C --> E[Filter Summer Period + Cloud Masking]
 
-D --> F[Compute LST (°C)]
+D --> F[Compute Land Surface Temperature]
 E --> G[Compute NDVI]
 
-F --> H[Aggregate LST (Mean)]
-G --> I[Aggregate NDVI (Median)]
+F --> H[Aggregate LST Composite]
+G --> I[Aggregate NDVI Composite]
 
-H --> J[Spatial Alignment]
+H --> J[Spatial Alignment and Resampling]
 I --> J
 
-J --> K[Combine LST + NDVI]
+J --> K[Combine LST and NDVI Layers]
 
-K --> L[Apply Rule-Based Classification]
-L --> M[Identify High-Risk Zones]
+K --> L[Apply Rule-Based Hotspot Classification]
+L --> M[Identify Relative Heat-Risk Zones]
 
-M --> N[Validate with NYC Heat Vulnerability Index]
+M --> N[Compare with NYC Heat Vulnerability Index]
 
-N --> O[Output Map / Priority Zones]
+N --> O[Generate Interactive Spatial Output]
 ```
 
 ---
@@ -46,108 +48,136 @@ N --> O[Output Map / Priority Zones]
 
 ### 1. Study Area Definition
 
-* Manhattan boundary is extracted using administrative data
-* Ensures analysis is restricted to relevant geographic extent
+* Administrative boundary data is used to isolate Manhattan
+* All datasets are clipped to the same geographic extent to ensure spatial consistency
 
 ---
 
 ### 2. Data Ingestion
 
-**Landsat (LST):**
+### Landsat 8 Surface Temperature Dataset
 
-* Source: Landsat 8 Collection 2
-* Thermal band used to derive land surface temperature
+* Source: Landsat 8 Collection 2 Level 2
+* Thermal infrared band used for Land Surface Temperature derivation
+* Selected because of strong suitability for urban thermal analysis
 
-**Sentinel-2 (NDVI):**
+### Sentinel-2 Surface Reflectance Dataset
 
 * Source: Sentinel-2 Surface Reflectance
-* Red and Near-Infrared bands used to compute NDVI
+* Red and Near-Infrared bands used for NDVI calculation
+* Selected to represent vegetation distribution and density
 
 ---
 
-### 3. Data Filtering
+### 3. Temporal and Quality Filtering
 
-* Temporal filtering: June–August (peak summer)
-* Cloud filtering applied:
+* Analysis restricted to June–August 2018 to represent peak summer conditions
+* Cloud and atmospheric contamination reduced through filtering procedures
 
-  * Landsat: cloud cover metadata
-  * Sentinel-2: SCL-based masking
+### Filtering Methods
+
+* Landsat:
+
+  * Cloud cover metadata threshold filtering
+
+* Sentinel-2:
+
+  * Scene Classification Layer (SCL)-based cloud masking
 
 ---
 
 ### 4. Feature Extraction
 
-* LST computed from thermal band and converted to °C
-* NDVI computed using normalized difference formula
+### Land Surface Temperature (LST)
+
+LST values are extracted from the Landsat thermal band and converted into degrees Celsius.
+
+### Normalized Difference Vegetation Index (NDVI)
+
+NDVI is computed using the normalized difference between Near-Infrared and Red spectral bands.
+
+NDVI acts as a proxy indicator for vegetation presence and density.
 
 ---
 
-### 5. Aggregation
+### 5. Temporal Aggregation
 
-* LST aggregated using mean (captures overall heat pattern)
-* NDVI aggregated using median (reduces noise and cloud artifacts)
+### LST Aggregation
 
----
+* Mean compositing used to represent overall summer thermal conditions
 
-### 6. Data Integration
+### NDVI Aggregation
 
-* LST and NDVI layers are spatially aligned
-* Combined to create a joint dataset representing heat + vegetation
+* Median compositing used to reduce cloud contamination and temporal noise
 
 ---
 
-### 7. Classification Logic
+### 6. Spatial Integration
 
-A rule-based approach is used:
-
-* High LST + Low NDVI → High-risk zone
-* Low LST + High NDVI → Low-risk zone
-
-This provides a simplified but interpretable method for identifying priority areas.
+* LST and NDVI layers are spatially aligned into a common analytical framework
+* Resolution differences between datasets are documented as a limitation
+* Combined dataset represents thermal exposure and vegetation conditions simultaneously
 
 ---
 
-### 8. Validation
+### 7. Relative Hotspot Classification
 
-* Results are compared with NYC Heat Vulnerability Index
-* Used as a reference to check consistency with known vulnerable areas
+A transparent rule-based classification approach is applied:
+
+* High LST + Low NDVI → Relative high-risk hotspot zone
+* Low LST + High NDVI → Relative lower-risk zone
+
+The classification system is intended for interpretable prioritisation rather than predictive modelling.
 
 ---
 
-### 9. Output
+### 8. Validation and Contextual Comparison
 
-* Spatial map highlighting:
+* Identified hotspot patterns are compared against the NYC Heat Vulnerability Index (HVI)
+* Validation is used as a contextual consistency check rather than strict ground-truth verification
 
-  * High-risk zones
-  * Moderate zones
-  * Low-risk zones
+---
 
-* Enables planners to prioritise interventions such as:
+### 9. Final Output Generation
 
-  * tree planting
-  * shading
-  * material changes
+The system generates an interactive spatial dashboard displaying:
+
+* Land Surface Temperature patterns
+* Vegetation distribution
+* Relative hotspot classifications
+* Priority intervention zones
+
+The output supports planning decisions related to:
+
+* Tree planting
+* Urban greening
+* Surface material interventions
+* Heat mitigation prioritisation
 
 ---
 
 ## Assumptions
 
-* LST is a valid proxy for urban heat intensity
-* NDVI adequately represents vegetation presence
-* Summer conditions represent peak thermal stress
-* Rule-based classification is sufficient for prioritisation
+* Land Surface Temperature is an acceptable proxy for urban heat intensity
+* NDVI adequately represents broad vegetation distribution patterns
+* Summer imagery captures periods of elevated urban thermal stress
+* Relative hotspot classification is sufficient for neighbourhood-scale prioritisation
 
 ---
 
 ## Limitations
 
-* Does not account for humidity, wind, or human thermal comfort
-* Limited temporal scope (single season snapshot)
-* Spatial resolution constraints (30m vs 10m)
-* Simplified classification logic (no predictive modeling)
+* Does not directly measure human thermal comfort
+* Does not include humidity, wind, radiation balance, or shading geometry
+* Limited to Summer 2018 imagery
+* Spatial resolution differences exist between Landsat and Sentinel-2 datasets
+* Classification is rule-based and non-predictive
+* Results should be interpreted as relative spatial patterns rather than exact street-level measurements
 
 ---
 
 ## Conclusion
 
-The system provides a transparent and reproducible pipeline for identifying urban heat hotspots and prioritising intervention zones using satellite data. While simplified, it offers actionable insights for urban planning and climate resilience strategies.
+The system provides a reproducible and interpretable geospatial workflow for identifying neighbourhood-scale urban thermal hotspot patterns across Manhattan.
+
+While simplified, the workflow supports evidence-based urban heat mitigation planning using transparent analytical assumptions, satellite-derived environmental indicators, and clearly documented limitations.

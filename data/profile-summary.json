@@ -1,0 +1,16 @@
+{
+  "study_area": "Manhattan",
+  "time_period": "2018-06-01 to 2018-08-31",
+  "landsat_scene_count": 2,
+  "sentinel_scene_count": 7,
+  "lst_statistics": {
+    "LST_max": 49.20172034000001,
+    "LST_mean": 30.732315518857664,
+    "LST_min": 10.331996900000036
+  },
+  "ndvi_statistics": {
+    "NDVI_max": 0.6994929909706116,
+    "NDVI_mean": 0.0916949249737827,
+    "NDVI_min": -0.27076125144958496
+  }
+}
