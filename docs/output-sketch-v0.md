@@ -4,124 +4,152 @@
 
 ## What is the final output?
 
-- [x] Dashboard (interactive map interface)
+* [x] Interactive spatial dashboard
 
-**One-sentence description of the output:**
+### One-sentence description of the output
 
-An interactive spatial decision-support map that visualises heat exposure risk across Manhattan using land surface temperature (LST) and vegetation (NDVI) data, enabling identification of priority zones for heat mitigation.
+An interactive geospatial decision-support dashboard that visualises relative urban heat exposure patterns across Manhattan using Land Surface Temperature (LST) and vegetation density indicators (NDVI) to support heat mitigation prioritisation.
 
 ---
 
 ## Who is the user?
 
-A climate resilience analyst at a New York City municipal agency, working on urban heat mitigation planning and resource allocation.
+A climate resilience or urban planning analyst working within a New York City municipal agency.
 
 ### What does the user already know?
 
-- Familiar with GIS-based spatial data  
-- Understands urban heat island concepts  
-- Uses maps and data to support policy decisions  
+* Basic GIS and spatial analysis workflows
+* Urban heat island concepts
+* Heat mitigation planning strategies
+* Interpretation of environmental maps and spatial indicators
 
 ### What does the user NOT know?
 
-- Exact street-block-level heat hotspots  
-- Where vegetation is insufficient relative to heat  
-- Which specific zones should be prioritised for intervention  
+* Which neighbourhood-scale areas consistently exhibit elevated surface temperatures
+* How vegetation distribution spatially relates to heat exposure patterns
+* Which zones should be prioritised first for mitigation interventions under limited budgets
 
 ---
 
 ## The top 3 actions this output enables
 
-1. Identify the top 5–10 highest heat-risk zones in Manhattan  
-2. Compare heat levels with vegetation distribution across locations  
-3. Select priority areas for targeted interventions such as tree planting or shading  
+1. Identify neighbourhood-scale urban heat hotspot zones across Manhattan
+2. Compare vegetation distribution against surface temperature patterns
+3. Prioritise areas for urban heat mitigation interventions such as tree planting, greening, or shading infrastructure
 
 ---
 
 ## Sketch (layout description)
 
-- **Top:** Title + legend (heat scale and vegetation scale)  
-- **Center:** Interactive map displaying Manhattan  
-- **Layers:**
-  - LST heat map (blue → red)
-  - NDVI vegetation map (brown → green)
-  - Heat risk classification (green → yellow → red)  
-- **Side panel (optional):**
-  - Toggle layers on/off  
-  - Display selected point values (LST, NDVI, risk score)  
-- **Bottom (optional):**
-  - List of top 5–10 priority zones  
+### Main Interface
+
+* Interactive Manhattan map
+* Layer controls
+* Heat-risk legend
+* Dataset transparency information
+
+### Map Layers
+
+* Land Surface Temperature (LST) layer
+* NDVI vegetation layer
+* Relative heat-risk classification layer
+* Optional NYC Heat Vulnerability Index comparison layer
+
+### Side Panel
+
+* Toggle datasets on/off
+* Display selected pixel or zone statistics
+* Show relative hotspot classification
+* Explain analytical limitations and assumptions
+
+### Bottom Panel (Optional)
+
+* Ranked list of priority intervention zones
+* Summary statistics for selected regions
 
 ---
 
-## Example Output (Derived Results)
+## Example Output (Illustrative Only)
 
-The system identifies high-risk zones using a rule-based combination of high LST and low NDVI.
+The system identifies relative hotspot zones using a rule-based combination of:
 
-### Top Priority Zones (Sample)
+* Higher Land Surface Temperature values
+* Lower NDVI vegetation values
 
-| Rank | Latitude | Longitude | Risk Score |
-|---|---|---|---|
-| 1 | 40.7103 | -73.9851 | 1.09 |
-| 2 | 40.7436 | -73.9949 | 0.98 |
-| 3 | 40.7449 | -73.9762 | 0.95 |
-| 4 | 40.7183 | -73.9921 | 0.94 |
-| 5 | 40.7542 | -73.9872 | 0.92 |
+### Sample Priority Zones
+
+| Rank | Approximate Area                 | Relative Risk Level |
+| ---- | -------------------------------- | ------------------- |
+| 1    | Lower Manhattan                  | High                |
+| 2    | Midtown Commercial Corridor      | High                |
+| 3    | East Harlem Built-Up Zone        | Medium–High         |
+| 4    | Upper Midtown Dense Corridor     | Medium–High         |
+| 5    | Lower East Side Dense Urban Area | Medium              |
 
 ### Interpretation
 
-- High-risk zones are concentrated in dense urban areas with low vegetation  
-- Lower Manhattan and Midtown emerge as priority intervention zones  
-- These areas are dominated by impervious surfaces such as concrete and asphalt  
+* Areas with dense impervious surfaces and limited vegetation tend to exhibit elevated surface temperatures
+* Vegetated areas such as Central Park generally correspond with lower relative heat exposure
+* Results represent neighbourhood-scale thermal patterns rather than exact street-level thermal conditions
 
 ---
 
 ## What this output is NOT
 
-- A real-time monitoring system  
-- A full thermal comfort model (does not include humidity, wind, or shading effects)  
+* A real-time monitoring system
+* A predictive climate forecasting platform
+* A full human thermal comfort model
+* A building-scale or pedestrian-scale simulation system
+
+The system does not directly account for:
+
+* Humidity
+* Wind
+* Shade geometry
+* Human activity patterns
+* Indoor environmental conditions
 
 ---
 
 ## What would make a user trust this output?
 
 Clear communication of:
-- Data sources (Landsat, Sentinel-2, NYC datasets)  
-- Methodology (rule-based classification)  
-- Limitations (proxy-based analysis and resolution constraints)  
+
+* Data provenance and sources
+* Processing methodology
+* Classification logic
+* Known limitations
+* Resolution constraints
+* Validation comparisons with external datasets
 
 ---
 
 ## How does this connect to the rest of the work?
 
-| Seminar artifact | How it feeds into this output |
-|---|---|
-| Problem brief (v2) | Defines the decision: prioritising heat mitigation zones |
-| Datasheets | Provide data source credibility and transparency |
-| Quality audit | Explains limitations and uncertainty |
-| Decision map | Links questions to datasets |
-| System sketch | Describes how the output is generated |
-| (Future) Model card | Documents model logic and assumptions |
-| (Future) Failure gallery | Highlights known limitations and edge cases |
+| Seminar artifact       | Contribution to output                            |
+| ---------------------- | ------------------------------------------------- |
+| Problem Brief v1/v2    | Defines the planning decision and project scope   |
+| Datasheets             | Documents dataset suitability and limitations     |
+| Data Quality Audit     | Identifies uncertainty and preprocessing concerns |
+| Data → Decision Map    | Connects analytical questions to datasets         |
+| System Sketch          | Defines pipeline structure and processing logic   |
+| Future Model Card      | Will document classification assumptions          |
+| Future Failure Gallery | Will communicate known edge cases and weaknesses  |
 
 ---
 
 ## Limitations in Output
 
-- Uses satellite-derived proxies (LST, NDVI), not direct thermal comfort measurements  
-- Hotspots are pixel-based approximations of street-block conditions  
-- Temporal scope limited to selected summer period  
-- Does not include socio-economic or behavioural factors  
+* Uses satellite-derived proxy indicators rather than direct thermal comfort measurements
+* Results are dependent on Summer 2018 imagery only
+* Spatial resolution limits fine-scale urban interpretation
+* Classification logic is rule-based and non-predictive
+* Vegetation indicators represent broad green-cover patterns rather than exact canopy structure
 
 ---
 
 ## Conclusion
 
-The output provides a clear, interpretable, and actionable interface for identifying urban heat risk zones in Manhattan. It enables data-driven prioritisation of interventions, supporting urban climate resilience planning with transparent assumptions and limitations.
+The proposed output provides an interpretable and reproducible geospatial decision-support tool for identifying relative urban heat exposure patterns across Manhattan.
 
----
-
-## Sign-off
-
-**Team:** Dhruvil Mahendra Bhanushali, Jinesh Narendra Jain, Rudra Mhatre, Sumit Sudhir Shingne  
-**Last updated:** 2026-05-04
+The dashboard supports evidence-based prioritisation of heat mitigation interventions while maintaining transparency about data limitations, analytical assumptions, and uncertainty.
