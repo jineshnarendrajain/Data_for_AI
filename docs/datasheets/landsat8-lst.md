@@ -139,11 +139,28 @@ Yes.
 
 ### What preprocessing did WE do before adopting the dataset?
 
+The project adopted a structured exploratory cleaning workflow during
+Session 3 to improve consistency between Landsat thermal outputs and
+other derived urban heat analysis layers.
+
+The preprocessing and cleaning workflow included:
+
 * Spatial clipping to Manhattan
 * Summer-period temporal filtering
-* Cloud-cover filtering
+* Cloud-cover filtering and masking
 * Conversion of thermal band values into degrees Celsius
 * Temporal mean compositing
+* CRS validation between raster workflows
+* NoData raster handling
+* Validation of plausible Land Surface Temperature ranges
+* Raster integration with Sentinel-2 NDVI workflows
+* Preliminary hotspot artifact reduction
+* Modular cleaning workflow development in `src/clean_data.py`
+
+The workflow remains partially exploratory and was designed primarily to
+improve reproducibility, consistency, and interpretability of downstream
+urban heat analysis outputs rather than to produce a fully atmosphere-
+corrected remote sensing product.
 
 ### Where is the preprocessing software / code available?
 
