@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(\\(Get-Content \"C:\\\\Users\\\\User\\\\github-classroom\\\\Data_for_AI\\\\dataforai\\\\Data_for_AI\\\\notebooks\\\\02-data-cleaning.ipynb\" -Raw\\) -match '\"import geemap\"')"
+    ]
+  }
+}

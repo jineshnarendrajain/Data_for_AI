@@ -2,247 +2,263 @@
 
 ## Purpose
 
-Pipeline Architecture V2 extends the Session 3 data preparation workflow by introducing data splitting, model training, model evaluation, and model persistence.
+Pipeline Architecture V2 extends the Session 3 data preparation workflow by introducing a reproducible geospatial heat-risk analysis framework.
 
-The objective of this pipeline is to develop a reproducible machine learning workflow capable of predicting Universal Thermal Climate Index (UTCI) conditions from environmental variables for urban heat assessment.
+The objective of this pipeline is to identify relative urban heat hotspots across Manhattan using satellite-derived land surface temperature (LST) and vegetation density (NDVI).
+
+The resulting outputs support neighbourhood-scale heat mitigation planning and form the analytical foundation for later evaluation and decision-support activities.
 
 ---
 
 ## Pipeline Overview
 
 ```text
-Historical Environmental Data
+Manhattan Study Area
         ↓
-Data Validation & Cleaning
+Landsat 8 Collection 2 Level 2
         ↓
-Feature Engineering
+Land Surface Temperature (LST)
         ↓
-manhattan-utci-clean.parquet
+
+Sentinel-2 Surface Reflectance
         ↓
-split_data.py
+Normalized Difference Vegetation Index (NDVI)
         ↓
-Train / Validation / Test Datasets
+
+Environmental Profiling
         ↓
-Baseline Model
+
+LST Normalization
         ↓
-Random Forest Regressor
+
+NDVI Normalization
         ↓
-Model Evaluation
+
+Heat Risk Score
+(LSTnorm − NDVInorm)
         ↓
-Model Persistence
+
+Hotspot Identification
         ↓
-models/baseline.joblib
+
+Priority Intervention Zones
+        ↓
+
+Evaluation & Decision Support
 ```
 
 ---
 
 ## Pipeline Components
 
-### 1. Data Acquisition
+### 1. Study Area Definition
 
 Purpose:
 
-Acquire historical environmental observations for Manhattan, New York City.
+Define the geographic extent for analysis.
 
-Source:
+Study Area:
 
-* Open-Meteo Historical Weather Archive
+```text
+Manhattan
+New York City
+United States
+```
 
-Variables collected:
+Time Period:
 
-* Air Temperature (°C)
-* Relative Humidity (%)
-* Wind Speed (m/s)
-* Solar Radiation (W/m²)
+```text
+2018-06-01
+to
+2018-08-31
+```
 
 Output:
 
-* Raw environmental observations
+* Analysis boundary
 
 ---
 
-### 2. Data Cleaning and Validation
+### 2. Land Surface Temperature Extraction
 
 Purpose:
 
-Prepare the raw environmental observations for machine learning analysis.
+Measure spatial variation in urban surface temperature.
 
-Cleaning operations:
+Dataset:
 
-* Timestamp validation
-* Missing value inspection
-* Data type standardization
+```text
+LANDSAT/LC08/C02/T1_L2
+```
+
+Scenes Used:
+
+```text
+2 scenes
+```
+
+Thermal Processing:
+
+```text
+LST = (ST_B10 × 0.00341802) + 149.0 − 273.15
+```
+
+Output:
+
+* Mean Summer LST raster
+
+Observed Statistics:
+
+| Metric  | Value    |
+| ------- | -------- |
+| Minimum | 10.33 °C |
+| Mean    | 30.73 °C |
+| Maximum | 49.20 °C |
+
+---
+
+### 3. Vegetation Density Extraction
+
+Purpose:
+
+Measure vegetation presence and spatial greenness.
+
+Dataset:
+
+```text
+COPERNICUS/S2_SR
+```
+
+Scenes Used:
+
+```text
+7 scenes
+```
+
+NDVI Calculation:
+
+```text
+NDVI = (B8 − B4) / (B8 + B4)
+```
+
+Output:
+
+* Median Summer NDVI raster
+
+Observed Statistics:
+
+| Metric  | Value |
+| ------- | ----- |
+| Minimum | -0.27 |
+| Mean    | 0.09  |
+| Maximum | 0.70  |
+
+---
+
+### 4. Environmental Profiling
+
+Purpose:
+
+Summarise environmental conditions across Manhattan.
+
+Profiling Activities:
+
+* LST distribution assessment
+* NDVI distribution assessment
+* Spatial consistency review
+* Plausibility checking
 * Range validation
-* Feature consistency checks
 
-Responsible script:
+Artifact Produced:
 
-* `src/clean_data.py`
-
-Output:
-
-* `data/processed/manhattan-utci-clean.parquet`
-
-Dataset size:
-
-* 2208 observations
-* 6 variables
+```text
+data/profile-summary.json
+```
 
 ---
 
-### 3. Feature Engineering
+### 5. Heat Risk Scoring
 
 Purpose:
 
-Generate the target variable required for predictive modelling.
+Combine thermal exposure and vegetation conditions into a single interpretable indicator.
 
-Generated feature:
+#### Step 1
 
-* Universal Thermal Climate Index (UTCI)
+Normalize LST values.
 
-Model inputs:
+#### Step 2
 
-* air_temp_c
-* humidity_pct
-* wind_speed_ms
-* solar_radiation
+Normalize NDVI values.
 
-Target variable:
+#### Step 3
 
-* utci
+Compute heat risk score:
 
-Output:
-
-* Analysis-ready modelling dataset
-
----
-
-### 4. Data Splitting
-
-Purpose:
-
-Create leakage-safe datasets for training, validation, and testing.
-
-Method:
-
-* Chronological split
-* No random shuffling
-* Temporal ordering preserved
-
-Responsible script:
-
-* `src/split_data.py`
-
-Outputs:
-
-* `data/processed/manhattan-utci-train.parquet`
-* `data/processed/manhattan-utci-val.parquet`
-* `data/processed/manhattan-utci-test.parquet`
-
-Split summary:
-
-| Dataset    | Records |
-| ---------- | ------: |
-| Train      |    1545 |
-| Validation |     331 |
-| Test       |     332 |
-
----
-
-### 5. Baseline Model
-
-Purpose:
-
-Establish a benchmark performance level.
-
-Algorithm:
-
-* DummyRegressor(strategy="mean")
-
-Evaluation Results:
-
-| Metric |  Value |
-| ------ | -----: |
-| MAE    |  3.862 |
-| R²     | -1.133 |
+```text
+Heat Risk Score =
+Normalized LST − Normalized NDVI
+```
 
 Interpretation:
 
-The baseline predicts the average UTCI observed during training and serves as the minimum acceptable benchmark.
-
----
-
-### 6. Predictive Model
-
-Purpose:
-
-Predict UTCI from environmental conditions.
-
-Algorithm:
-
-* Random Forest Regressor
-
-Configuration:
-
-* n_estimators = 100
-* random_state = 42
-
-Responsible script:
-
-* `src/baseline_model.py`
-
-Inputs:
-
-* air_temp_c
-* humidity_pct
-* wind_speed_ms
-* solar_radiation
+* High LST increases risk
+* High NDVI reduces risk
+* Higher scores indicate greater relative heat exposure
 
 Output:
 
-* Predicted UTCI value
+* Heat Risk raster
 
 ---
 
-### 7. Model Evaluation
+### 6. Hotspot Identification
 
 Purpose:
 
-Assess predictive performance using the validation dataset.
+Identify locations exhibiting the highest relative heat risk.
 
-Metrics:
+Method:
 
-* Mean Absolute Error (MAE)
-* Coefficient of Determination (R²)
+* Evaluate heat risk raster
+* Extract highest-risk locations
+* Generate hotspot samples
 
-Validation Results:
+Output:
 
-| Model         |   MAE |     R² |
-| ------------- | ----: | -----: |
-| Baseline      | 3.862 | -1.133 |
-| Random Forest | 0.225 |  0.992 |
+```text
+Top hotspot samples extracted
+Count: 10
+```
 
-Outcome:
+Produced Artifacts:
 
-The Random Forest model substantially outperformed the baseline model and was selected as the final model.
+* Hotspot layer
+* Hotspot summary
 
 ---
 
-### 8. Model Persistence
+### 7. Decision-Support Outputs
 
 Purpose:
 
-Save the trained model for future reuse.
+Translate analytical outputs into actionable planning information.
 
-Stored Artifact:
+Outputs:
 
-* `models/baseline.joblib`
+* LST visualisation
+* NDVI visualisation
+* Heat risk visualisation
+* Hotspot maps
+* Priority intervention locations
 
-Benefits:
+Potential Applications:
 
-* Reproducible predictions
-* Reduced retraining requirements
-* Consistent deployment workflow
+* Urban greening
+* Tree planting
+* Heat mitigation planning
+* Environmental monitoring
+* Climate adaptation planning
 
 ---
 
@@ -251,27 +267,9 @@ Benefits:
 ### Data
 
 ```text
-data/processed/
-├── manhattan-utci-clean.parquet
-├── manhattan-utci-train.parquet
-├── manhattan-utci-val.parquet
-└── manhattan-utci-test.parquet
-```
-
-### Source Code
-
-```text
-src/
-├── clean_data.py
-├── split_data.py
-└── baseline_model.py
-```
-
-### Models
-
-```text
-models/
-└── baseline.joblib
+data/
+├── profile-summary.json
+└── processed/
 ```
 
 ### Notebooks
@@ -280,7 +278,18 @@ models/
 notebooks/
 ├── 01-data-profiling.ipynb
 ├── 02-data-cleaning.ipynb
-└── 03-modelling.ipynb
+└── 03-heat-risk-analysis.ipynb
+```
+
+### Documentation
+
+```text
+docs/
+├── problem-brief-v2.md
+├── system-sketch-v0.md
+├── output-sketch-v0.md
+├── modelling_log.md
+└── heat-risk-analysis-card.md
 ```
 
 ---
@@ -289,40 +298,55 @@ notebooks/
 
 The pipeline was designed to be reproducible through:
 
-* Fixed random seed (42)
-* Version-controlled source code
-* Explicit train/validation/test splits
-* Saved model artifacts
-* Documented evaluation metrics
-* Structured notebook workflow
+* Public satellite datasets
+* Explicit processing formulas
+* Documented study period
+* Version-controlled notebooks
+* Archived summary statistics
+* Transparent analytical rules
+
+No stochastic model training is used.
+
+---
+
+## Limitations
+
+### Temporal Limitation
+
+The analysis represents conditions during Summer 2018 only.
+
+### Spatial Resolution Limitation
+
+Results are constrained by the resolution of Landsat and Sentinel imagery.
+
+### Interpretation Limitation
+
+The heat risk score represents relative spatial heat exposure and should not be interpreted as a direct measure of human thermal stress.
 
 ---
 
 ## Future Extensions
 
-Potential improvements include:
+Potential future improvements include:
 
-* Additional environmental predictors
-* Spatially explicit modelling
-* Cross-validation experiments
-* Hyperparameter optimization
-* Thermal stress classification models
-* Integration with urban heat mapping workflows
+* Neighbourhood-scale aggregation using NYC NTAs
+* Comparison against the NYC Heat Vulnerability Index
+* Multi-year temporal analysis
+* Seasonal comparisons
+* Interactive web-based decision-support tools
+* Additional environmental indicators
 
 ---
 
 ## Summary
 
-Pipeline Architecture V2 transforms validated environmental observations into a deployable machine learning workflow capable of predicting UTCI conditions.
+Pipeline Architecture V2 transforms satellite observations into a reproducible urban heat hotspot identification workflow.
 
-The workflow incorporates:
+The pipeline combines:
 
-* Data cleaning
-* Feature engineering
-* Dataset splitting
-* Baseline benchmarking
-* Random Forest modelling
-* Model evaluation
-* Artifact persistence
+* Land Surface Temperature
+* Vegetation Density
+* Heat Risk Scoring
+* Hotspot Identification
 
-and establishes the foundation for future urban heat analysis and decision-support applications.
+to support evidence-based urban heat mitigation planning across Manhattan.
