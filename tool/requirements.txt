@@ -1,0 +1,10 @@
+# Manhattan Heat Mitigation Decision Support Tool — runtime dependencies
+# scikit-learn is pinned to the version the model was trained/pickled with (1.6.1)
+# to guarantee the joblib artifact unpickles correctly.
+streamlit==1.45.1
+pandas==2.2.3
+numpy==2.2.5
+joblib>=1.3
+folium==0.20.0
+streamlit-folium>=0.20.0
+scikit-learn==1.6.1

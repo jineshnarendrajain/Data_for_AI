@@ -1,0 +1,579 @@
+/* =====================================================================
+   Manhattan Heat Mitigation Decision Support Tool - dashboard styling
+   ---------------------------------------------------------------------
+   Designed to be THEME-INDEPENDENT and readable from the back of a room.
+   All "light surface" elements (metric cards, sidebar) explicitly pin
+   their text to dark colours so they remain legible regardless of whether
+   Streamlit is running in its light or dark base theme.
+   ===================================================================== */
+
+/* =====================================================================
+   MAP-FIRST: the map is the application; everything else floats over it.
+   Hide Streamlit chrome and go edge-to-edge so the map fills the viewport.
+   ===================================================================== */
+header[data-testid="stHeader"],
+[data-testid="stToolbar"],
+[data-testid="stDecoration"],
+[data-testid="stStatusWidget"],
+#MainMenu,
+footer { display: none !important; }
+
+/* The app has NO sidebar content -> hard-hide the sidebar and its collapsed
+   control so it can never appear or reserve horizontal space (fixes the white
+   sidebar / right-shift regression). */
+section[data-testid="stSidebar"],
+[data-testid="stSidebarCollapsedControl"],
+[data-testid="collapsedControl"] { display: none !important; }
+
+/* Full-bleed: remove default page padding so the map can reach every edge.
+   IMPORTANT: we deliberately do NOT set heights on stApp / stAppViewContainer /
+   stMain / stMainBlockContainer / stVerticalBlock -- forcing those is what caused
+   the sidebar + right-shift regression, so the page hierarchy is left intact. */
+.block-container,
+[data-testid="stMainBlockContainer"] {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+}
+
+/* THE MAP IS THE FULL-SCREEN BACKGROUND.
+   Pin ONLY the map's own element-container out of flow to the viewport. Hook:
+   the element-container holding the declared st_folium component
+   (data-testid="stCustomComponentV1"); the report dialog uses components.html
+   (stIFrame) so it is never matched. Because the map is removed from flow, no
+   wrapper reserves space below it, so the black region cannot appear -- without
+   touching the page hierarchy. Controls float above via z-index. */
+[data-testid="stElementContainer"]:has([data-testid="stCustomComponentV1"]),
+.st-key-planmap {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    z-index: 0 !important;
+}
+[data-testid="stCustomComponentV1"],
+[data-testid="stCustomComponentV1"] iframe {
+    width: 100vw !important;
+    height: 100vh !important;
+    border: 0 !important;
+    display: block !important;
+}
+
+/* Larger, bolder section headings for projector readability */
+h1 { font-weight: 800 !important; }
+h2 { font-size: 1.55rem !important; font-weight: 800 !important; letter-spacing: .2px; }
+h3 { font-size: 1.2rem  !important; font-weight: 700 !important; }
+
+/* =====================================================================
+   Header banner
+   ===================================================================== */
+.app-header {
+    background: linear-gradient(120deg, #08304f 0%, #1f78b4 58%, #fc8d59 140%);
+    color: #ffffff;
+    padding: 1.25rem 1.6rem;
+    border-radius: 16px;
+    margin-bottom: 1.2rem;
+    box-shadow: 0 6px 18px rgba(8, 48, 79, 0.28);
+}
+.app-header h1 {
+    margin: 0;
+    font-size: 2rem;
+    color: #ffffff !important;
+    line-height: 1.15;
+}
+.app-header p {
+    margin: 0.3rem 0 0 0;
+    font-size: 1.05rem;
+    color: #eaf3fb !important;
+    opacity: 0.96;
+}
+
+/* =====================================================================
+   Metric cards  (apply everywhere - main area AND sidebar)
+   Force dark text on a white card so values can never blend in.
+   ===================================================================== */
+div[data-testid="stMetric"] {
+    background: #ffffff !important;
+    border: 1px solid #d4dce8;
+    border-left: 6px solid #1f78b4;
+    border-radius: 12px;
+    padding: 0.85rem 1.05rem;
+    box-shadow: 0 2px 8px rgba(8, 48, 79, 0.10);
+}
+/* Label */
+div[data-testid="stMetric"] [data-testid="stMetricLabel"],
+div[data-testid="stMetric"] [data-testid="stMetricLabel"] p,
+div[data-testid="stMetric"] label p {
+    color: #44506b !important;
+    font-weight: 700 !important;
+    font-size: 0.92rem !important;
+    opacity: 1 !important;
+}
+/* Value - the previously "invisible" element */
+div[data-testid="stMetric"] [data-testid="stMetricValue"] {
+    color: #08304f !important;
+    font-weight: 800 !important;
+    font-size: 1.85rem !important;
+    line-height: 1.15 !important;
+}
+/* Delta */
+div[data-testid="stMetric"] [data-testid="stMetricDelta"] {
+    font-weight: 700 !important;
+}
+
+/* =====================================================================
+   Sidebar - light panel with explicitly dark text (theme-independent)
+   ===================================================================== */
+section[data-testid="stSidebar"] {
+    background: #eef2f8 !important;
+    border-right: 1px solid #d4dce8;
+}
+/* Pin all sidebar copy to dark ink */
+section[data-testid="stSidebar"] h1,
+section[data-testid="stSidebar"] h2,
+section[data-testid="stSidebar"] h3,
+section[data-testid="stSidebar"] p,
+section[data-testid="stSidebar"] label,
+section[data-testid="stSidebar"] span,
+section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"],
+section[data-testid="stSidebar"] [data-testid="stCaptionContainer"] {
+    color: #18243d !important;
+}
+/* Tighten vertical rhythm - removes the large empty gaps */
+section[data-testid="stSidebar"] [data-testid="stVerticalBlock"] {
+    gap: 0.55rem;
+}
+section[data-testid="stSidebar"] hr {
+    margin: 0.55rem 0;
+    border-color: #c7d2e2;
+}
+section[data-testid="stSidebar"] .block-container {
+    padding-top: 1.2rem;
+}
+
+/* Sidebar buttons - outline style, readable on the light panel */
+section[data-testid="stSidebar"] .stButton > button {
+    background: #ffffff !important;
+    border: 1.5px solid #1f78b4 !important;
+    border-radius: 9px !important;
+    font-weight: 700 !important;
+    transition: all 0.15s ease-in-out;
+}
+section[data-testid="stSidebar"] .stButton > button p,
+section[data-testid="stSidebar"] .stButton > button div {
+    color: #1f78b4 !important;
+}
+section[data-testid="stSidebar"] .stButton > button:hover {
+    background: #1f78b4 !important;
+    border-color: #1f78b4 !important;
+}
+section[data-testid="stSidebar"] .stButton > button:hover p,
+section[data-testid="stSidebar"] .stButton > button:hover div {
+    color: #ffffff !important;
+}
+
+/* "How to use" help card */
+.helpcard {
+    background: #dceaf7;
+    border: 1px solid #b9d4ec;
+    border-radius: 10px;
+    padding: 0.75rem 0.9rem;
+    font-size: 0.86rem;
+    line-height: 1.5;
+    color: #18243d;
+}
+.helpcard b { color: #08304f; }
+.helpcard ol { margin: 0.3rem 0 0 1.05rem; padding: 0; }
+.helpcard li { margin-bottom: 0.15rem; }
+
+/* =====================================================================
+   Tabs - make the active workflow step obvious
+   ===================================================================== */
+button[data-baseweb="tab"] {
+    font-weight: 700 !important;
+    font-size: 1.0rem !important;
+}
+button[data-baseweb="tab"][aria-selected="true"] {
+    color: #1f78b4 !important;
+}
+
+/* =====================================================================
+   Primary action buttons (Add to plan, Export)
+   ===================================================================== */
+div.stButton > button[kind="primary"],
+div.stDownloadButton > button[kind="primary"] {
+    background: #1f78b4 !important;
+    border: none !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    border-radius: 9px !important;
+}
+div.stButton > button[kind="primary"] p,
+div.stDownloadButton > button[kind="primary"] p {
+    color: #ffffff !important;
+}
+
+/* =====================================================================
+   Map legend
+   ===================================================================== */
+.legend {
+    margin-top: 0.6rem;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: #64748b;
+}
+.legend .dot {
+    display: inline-block;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    margin-right: 4px;
+    vertical-align: middle;
+    border: 1px solid rgba(0, 0, 0, 0.18);
+}
+.legend .dot--planned { border: 2px solid #ffffff; box-shadow: 0 0 0 1px #1f78b4; }
+
+/* =====================================================================
+   MAP-FIRST PLANNING WORKFLOW
+   ===================================================================== */
+
+/* Slim header variant (map-first needs vertical room) */
+.app-header--slim { padding: 0.85rem 1.3rem; margin-bottom: 0.7rem; border-radius: 13px; }
+.app-header--slim h1 { font-size: 1.45rem; }
+.app-header--slim p { font-size: 0.95rem; margin-top: 0.15rem; }
+
+/* ---------- Compact budget bar (top) ---------- */
+.budgetbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    padding-top: 0.15rem;
+}
+.budgetbar .pill {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    background: #747070;
+    border: 1px solid #2b2c2e;
+    border-left: 4px solid #1f78b4;
+    border-radius: 9px;
+    padding: 0.34rem 0.7rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #44506b;
+    box-shadow: 0 1px 4px rgba(8, 48, 79, 0.08);
+}
+.budgetbar .pill b { font-size: 1.02rem; font-weight: 800; color: #08304f; }
+.budgetbar .pill--ok { border-left-color: #2e8b57; }
+.budgetbar .pill--ok b { color: #2e8b57; }
+.budgetbar .pill--bad { border-left-color: #d73027; }
+.budgetbar .pill--bad b { color: #d73027; }
+.budgetbar .pill--muted {
+    background: #eef2f8; border-left-color: #94a3b8; color: #475069;
+}
+
+/* ---------- Recommendation panel ---------- */
+.panel-head {
+    font-size: 1.0rem;
+    font-weight: 800;
+    color: #08304f;
+    margin-bottom: 0.4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.panel-rank {
+    background: #08304f;
+    color: #ffffff;
+    border-radius: 7px;
+    padding: 0.1rem 0.5rem;
+    font-size: 0.85rem;
+}
+
+/* Current-conditions pills */
+.condpills { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.7rem; }
+.condpills .cond {
+    background: #ffffff;
+    border: 1px solid #d4dce8;
+    border-radius: 8px;
+    padding: 0.28rem 0.55rem;
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: #44506b;
+}
+.condpills .cond b { display: block; font-size: 0.95rem; color: #08304f; font-weight: 800; }
+.condpills .cond--wide { font-size: 0.78rem; color: #08304f; align-self: center; }
+
+.rec-title {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #08304f;
+    margin: 0.2rem 0 0.5rem 0;
+}
+
+/* Recommendation cards (replace the comparison tables) */
+.reccard {
+    position: relative;
+    background: #ffffff;
+    border: 1px solid #d4dce8;
+    border-left: 5px solid #94a3b8;
+    border-radius: 11px;
+    padding: 0.6rem 0.75rem 0.65rem;
+    margin-bottom: 0.45rem;
+    box-shadow: 0 1px 5px rgba(8, 48, 79, 0.08);
+}
+.reccard.best {
+    border-left-color: #2e8b57;
+    border-color: #b6dcc6;
+    background: #f3fbf6;
+}
+.rec-badge {
+    position: absolute;
+    top: -9px;
+    right: 10px;
+    background: #2e8b57;
+    color: #ffffff;
+    font-size: 0.64rem;
+    font-weight: 800;
+    letter-spacing: 0.4px;
+    padding: 0.1rem 0.45rem;
+    border-radius: 6px;
+}
+.rec-name { font-size: 0.98rem; font-weight: 800; color: #08304f; }
+.rec-sub { font-size: 0.72rem; color: #6b7689; margin-bottom: 0.25rem; }
+.rec-figure {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #2e8b57;
+    line-height: 1.1;
+}
+.rec-figure__lbl {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #6b7689;
+    margin-left: 0.3rem;
+}
+.rec-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.3rem;
+    margin-top: 0.3rem;
+    font-size: 0.72rem;
+    color: #44506b;
+}
+.rec-meta b { color: #08304f; font-weight: 800; }
+
+/* "Already in plan" note */
+.planned-note {
+    background: #e7f3ec;
+    border: 1px solid #b6dcc6;
+    border-radius: 9px;
+    padding: 0.45rem 0.6rem;
+    font-size: 0.8rem;
+    color: #1f5135;
+    margin-bottom: 0.6rem;
+}
+.planned-note b { color: #08304f; }
+
+/* Empty-state placeholder (right panel before any selection) */
+.placeholder {
+    background: #eef2f8;
+    border: 1.5px dashed #b9c4d6;
+    border-radius: 13px;
+    padding: 1.2rem 1rem;
+    text-align: center;
+    color: #44506b;
+}
+.placeholder__icon { font-size: 2rem; }
+.placeholder__title { font-size: 1.05rem; font-weight: 800; color: #08304f; margin: 0.3rem 0 0.8rem; }
+.placeholder__steps {
+    text-align: left;
+    background: #ffffff;
+    border: 1px solid #d4dce8;
+    border-radius: 10px;
+    padding: 0.7rem 0.85rem;
+    font-size: 0.84rem;
+    color: #18243d;
+}
+.placeholder__steps b { color: #08304f; }
+.placeholder__steps ol { margin: 0.35rem 0 0 1.05rem; padding: 0; }
+.placeholder__steps li { margin-bottom: 0.2rem; }
+
+/* =====================================================================
+   ENVIRONMENTAL ANALYSIS LAYER  (map layers + colour-coded cards)
+   ===================================================================== */
+
+/* Ring legend swatches under the map */
+.legend .ring {
+    display: inline-block;
+    width: 13px; height: 13px;
+    border-radius: 50%;
+    margin-right: 4px;
+    vertical-align: middle;
+    background: transparent;
+}
+.legend .ring--cur { border: 3px solid #d73027; }
+.legend .ring--pred { border: 3px solid #2e8b57; }
+
+/* Layer-controls card (purple) */
+div.st-key-card_layers {
+    background: #f1ecfb;
+    border: 1px solid #cdbef0;
+    border-radius: 12px;
+    padding: 0.25rem 0.9rem;
+    margin-bottom: 0.55rem;
+}
+.layers-label { font-weight: 800; color: #4b3b86; padding-top: 0.55rem; font-size: 0.95rem; }
+div.st-key-card_layers label p { color: #3b2f66 !important; font-weight: 700 !important; }
+
+/* Workflow cards - each a distinct colour so they are clearly visible */
+div.st-key-card_site,
+div.st-key-card_recs,
+div.st-key-card_plan {
+    border-radius: 14px;
+    padding: 0.6rem 1rem 1rem;
+    height: 100%;
+}
+div.st-key-card_site { background: #e8f2fc; border: 1px solid #b3d2ee; }
+div.st-key-card_recs { background: #fff5e6; border: 1px solid #f1d39a; }
+div.st-key-card_plan { background: #e9f7ee; border: 1px solid #b4dcc4; }
+
+.card-title {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #08304f;
+    margin-bottom: 0.55rem;
+    border-bottom: 2px solid rgba(8, 48, 79, 0.10);
+    padding-bottom: 0.3rem;
+}
+.card-hint {
+    font-size: 0.86rem;
+    color: #51607a;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 9px;
+    padding: 0.65rem 0.75rem;
+}
+
+/* Intervention preview stat blocks (visual current/predicted/reduction) */
+.previewrow { display: flex; gap: 0.4rem; margin: 0.5rem 0 0.2rem; }
+.pstat {
+    flex: 1;
+    background: #ffffff;
+    border: 1px solid #d4dce8;
+    border-radius: 10px;
+    padding: 0.45rem 0.5rem;
+    text-align: center;
+}
+.pstat span { display: block; font-size: 0.66rem; font-weight: 700; color: #6b7689; }
+.pstat b { font-size: 1.15rem; font-weight: 800; }
+.pstat--cur { border-top: 4px solid #d73027; }
+.pstat--cur b { color: #d73027; }
+.pstat--pred { border-top: 4px solid #2e8b57; }
+.pstat--pred b { color: #2e8b57; }
+.pstat--red { border-top: 4px solid #08304f; }
+.pstat--red b { color: #08304f; }
+
+/* Plan list */
+.planlist { list-style: none; margin: 0.5rem 0 0; padding: 0; }
+.planlist li {
+    background: #ffffff;
+    border: 1px solid #d4dce8;
+    border-left: 4px solid #1f78b4;
+    border-radius: 8px;
+    padding: 0.32rem 0.55rem;
+    margin-bottom: 0.3rem;
+    font-size: 0.82rem;
+    color: #08304f;
+    font-weight: 700;
+}
+.planlist li span { float: right; color: #51607a; font-weight: 600; }
+
+/* =====================================================================
+   FLOATING OVERLAYS  (Google-Maps / ArcGIS style - the map is the app)
+   Real Streamlit widgets in keyed containers, pinned over the map.
+   ===================================================================== */
+div[class*="st-key-ov_"] {
+    position: fixed;
+    z-index: 1000;
+}
+
+/* Shared glassy panel look */
+.budgetcard,
+.maphint,
+div.st-key-ov_panel,
+div.st-key-ov_drawer {
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(9px);
+    -webkit-backdrop-filter: blur(9px);
+    border: 1px solid rgba(180, 198, 220, 0.6);
+    border-radius: 13px;
+    box-shadow: 0 6px 22px rgba(8, 48, 79, 0.22);
+}
+
+/* Top-left: ONE unified control panel (title + Layers + Tools + Demo) */
+div.st-key-ov_panel {
+    top: 12px; left: 14px;
+    width: 340px;
+    padding: 0.55rem 0.7rem 0.6rem;
+}
+div.st-key-ov_panel [data-testid="stVerticalBlock"] { gap: 0.4rem !important; }
+div.st-key-ov_panel [data-testid="stHorizontalBlock"] { gap: 0.4rem !important; }
+.brandchip {
+    display: flex; flex-direction: column; line-height: 1.12;
+    color: #08304f; font-size: 1.02rem;
+    padding: 0.1rem 0.15rem 0.45rem;
+    margin-bottom: 0.15rem;
+    border-bottom: 1px solid rgba(8, 48, 79, 0.10);
+}
+.brandchip span { font-size: 0.68rem; color: #51607a; font-weight: 600; }
+
+/* Top-right: RUN ANALYSIS + dedicated budget card (large readable typography) */
+div.st-key-ov_action { top: 12px; right: 14px; width: 250px; }
+.budgetcard {
+    display: flex; gap: 0.55rem;
+    padding: 0.6rem 0.7rem; margin-top: 0.55rem;
+}
+.bc-stat { flex: 1; display: flex; flex-direction: column; line-height: 1.05; }
+.bc-stat span {
+    font-size: 0.66rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.3px; color: #51607a;
+}
+.bc-stat b { font-size: 1.5rem; font-weight: 800; color: #08304f; margin-top: 2px; }
+.bc-stat--bad b { color: #d73027; }
+
+/* Bottom-left: collapsible legend */
+div.st-key-ov_legend { bottom: 16px; left: 14px; width: auto; }
+.legend--stack { font-size: 0.8rem; line-height: 1.8; color: #44506b; }
+.legend--stack b { color: #08304f; }
+
+/* Bottom-centre hint (no selection) */
+div.st-key-ov_hint { bottom: 20px; left: 50%; transform: translateX(-50%); width: auto; }
+.maphint { padding: 0.55rem 1.05rem; color: #08304f; font-weight: 700; font-size: 0.9rem; }
+
+/* Right slide-out drawer (appears on hotspot selection) */
+div.st-key-ov_drawer {
+    top: 152px; right: 14px;
+    width: 372px;
+    max-height: calc(100vh - 168px);
+    overflow-y: auto; overflow-x: hidden;
+    padding: 0.7rem 0.9rem 1rem;
+    animation: drawerIn 0.18s ease-out;
+}
+@keyframes drawerIn {
+    from { transform: translateX(24px); opacity: 0.3; }
+    to   { transform: translateX(0); opacity: 1; }
+}
+.drawer-head {
+    font-size: 1.0rem; font-weight: 800; color: #08304f;
+    display: flex; align-items: center; gap: 0.45rem;
+}
+div.st-key-drawer_close button {
+    padding: 0 !important; min-height: 0 !important;
+    font-weight: 800 !important;
+}
+/* Tighten widget spacing inside floating panels */
+div.st-key-ov_drawer [data-testid="stVerticalBlock"] { gap: 0.45rem !important; }
