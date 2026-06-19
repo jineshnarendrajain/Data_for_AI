@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Pipeline Architecture V3 documents the final validated workflow after Session 5 evaluation.
+Pipeline Architecture V3 documents the final validated workflow after Session 5 model training and evaluation.
 
 The architecture describes how publicly available Earth observation data are transformed into actionable urban heat intelligence for decision-support applications.
 
@@ -42,6 +42,13 @@ Heat Risk Score
         ↓
 
 Hotspot Identification
+        ↓
+
+Heat Risk Training Dataset
+        ↓
+
+Heat Risk Prediction Model
+(Random Forest Regressor)
         ↓
 
 Evaluation & Validity Audit
@@ -159,6 +166,42 @@ Identify candidate locations for:
 
 ---
 
+## Predictive Modelling Layer
+
+The heat risk outputs are used to train a machine learning model that predicts relative heat risk directly from environmental indicators.
+
+Model:
+
+```text
+Heat Risk Prediction Model
+Random Forest Regressor
+```
+
+Inputs:
+
+* Land Surface Temperature (LST)
+* Vegetation Density (NDVI)
+
+Performance:
+
+| Metric | Value  |
+| ------ | -----: |
+| MAE    | 0.0021 |
+| RMSE   | 0.0044 |
+| R²     | 0.9997 |
+
+Artifacts:
+
+```text
+notebooks/04-heat-risk-modelling.ipynb
+models/heat_risk_model.joblib
+docs/model_card.md
+```
+
+Full details are documented in the [Model Card](model_card.md).
+
+---
+
 ## Evaluation Layer
 
 Session 5 introduced:
@@ -190,12 +233,13 @@ The validated outputs support:
 
 ### Future Tool Development
 
-The workflow provides the analytical foundation for a future interactive dashboard capable of visualising:
+Session 6 will implement a Manhattan Heat Mitigation Decision Support Tool, powered by the trained Heat Risk Prediction Model, providing an interactive interface capable of visualising:
 
 * LST
 * NDVI
 * Heat Risk
 * Hotspot locations
+* Model-predicted heat risk
 
 for non-technical stakeholders.
 

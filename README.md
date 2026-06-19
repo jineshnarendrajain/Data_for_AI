@@ -24,8 +24,9 @@ The workflow uses satellite-derived environmental indicators to:
 * Characterise thermal conditions
 * Assess vegetation coverage
 * Identify relative heat hotspots
+* Train a machine learning model to predict relative heat risk
 * Support urban heat mitigation planning
-* Provide evidence for future decision-support tools
+* Provide evidence for decision-support tools
 
 ---
 
@@ -36,32 +37,29 @@ The workflow uses satellite-derived environmental indicators to:
 | Session 1 | Data Profiling                   | Environmental profiling and hotspot generation |
 | Session 2 | Data Quality Assessment          | Audit and decision mapping                     |
 | Session 3 | Data Cleaning & Reproducibility  | Cleaned datasets and workflow documentation    |
-| Session 4 | Heat Risk Analysis               | Heat risk framework and hotspot identification |
-| Session 5 | Evaluation & Validity Assessment | Evaluation reports and validity audit          |
-| Session 6 | Decision Support Tool (Planned)  | Interactive planning tool                      |
+| Session 4 | Heat Risk Framework Generation   | Heat risk framework and hotspot identification |
+| Session 5 | Heat Risk Model Training and Evaluation | Trained Random Forest heat-risk model, model card, and evaluation |
+| Session 6 | Decision Support Tool Development (Planned) | Manhattan Heat Mitigation Decision Support Tool powered by the trained Heat Risk Prediction Model |
 
 ---
 
 # Analytical Workflow
 
 ```text
-Landsat 8 Thermal Imagery
-            +
-Sentinel-2 Vegetation Imagery
+Satellite Data
+(Landsat 8 + Sentinel-2)
             ↓
-Environmental Profiling
-            ↓
-Land Surface Temperature (LST)
-            ↓
-Vegetation Density (NDVI)
+LST + NDVI
             ↓
 Heat Risk Framework
             ↓
-Hotspot Identification
+Heat Risk Training Dataset
             ↓
-Evaluation & Validity Assessment
+Random Forest Model
             ↓
-Decision Support Applications
+Model Evaluation
+            ↓
+Decision Support Tool
 ```
 
 ---
@@ -157,6 +155,61 @@ Top hotspot samples extracted: 10
 
 ---
 
+# Machine Learning Workflow
+
+Building on the rule-based heat risk framework, the project trains a machine learning model that predicts relative heat risk directly from environmental indicators.
+
+## Model
+
+```text
+Heat Risk Prediction Model
+Random Forest Regressor
+```
+
+## Inputs
+
+* Land Surface Temperature (LST)
+* Vegetation Density (NDVI)
+
+## Target
+
+* Relative Heat Risk Score
+
+## Training Dataset
+
+```text
+data/processed/manhattan_heat_risk_training.csv
+```
+
+## Performance
+
+| Metric | Value  |
+| ------ | -----: |
+| MAE    | 0.0021 |
+| RMSE   | 0.0044 |
+| R²     | 0.9997 |
+
+## Feature Importance
+
+| Feature | Importance |
+| ------- | ---------: |
+| NDVI    |     0.6336 |
+| LST     |     0.3664 |
+
+Vegetation density (NDVI) is the strongest predictor of relative heat risk within the study area.
+
+## Artifacts
+
+```text
+notebooks/04-heat-risk-modelling.ipynb
+models/heat_risk_model.joblib
+docs/model_card.md
+```
+
+Full details are documented in the [Model Card](docs/model_card.md).
+
+---
+
 # Repository Structure
 
 ```text
@@ -165,6 +218,7 @@ Data_for_AI/
 ├── data/
 │   ├── raw/
 │   ├── processed/
+│   │   └── manhattan_heat_risk_training.csv
 │   └── profile-summary.json
 │
 ├── docs/
@@ -175,6 +229,7 @@ Data_for_AI/
 │   ├── data-to-decision-map.md
 │   ├── function-design-checklist.md
 │   ├── modelling_log.md
+│   ├── model_card.md
 │   ├── heat-risk-analysis-card.md
 │   ├── evaluation-report.md
 │   ├── evaluation-log.md
@@ -189,7 +244,11 @@ Data_for_AI/
 ├── notebooks/
 │   ├── 01-data-profiling.ipynb
 │   ├── 02-data-cleaning.ipynb
-│   └── 03-heat-risk-analysis.ipynb
+│   ├── 03-heat-risk-analysis.ipynb
+│   └── 04-heat-risk-modelling.ipynb
+│
+├── models/
+│   └── heat_risk_model.joblib
 │
 ├── src/
 │   └── clean_data.py
@@ -230,10 +289,18 @@ jupyter notebook notebooks/02-data-cleaning.ipynb
 
 ---
 
-## Session 4 — Heat Risk Analysis
+## Session 4 — Heat Risk Framework Generation
 
 ```bash
 jupyter notebook notebooks/03-heat-risk-analysis.ipynb
+```
+
+---
+
+## Session 5 — Heat Risk Model Training and Evaluation
+
+```bash
+jupyter notebook notebooks/04-heat-risk-modelling.ipynb
 ```
 
 ---
@@ -249,6 +316,7 @@ The repository includes:
 * Output Sketch
 * Modelling Log
 * Heat Risk Analysis Card
+* Model Card (Heat Risk Prediction Model)
 
 ## Evaluation Documents
 
@@ -290,15 +358,32 @@ PASS WITH DOCUMENTED LIMITATIONS
 
 ---
 
+# Reproducibility
+
+The full workflow — including the trained Heat Risk Prediction Model — is reproducible through:
+
+* Public satellite datasets (Landsat 8 and Sentinel-2)
+* Documented processing formulas and study period
+* A versioned training dataset (`data/processed/manhattan_heat_risk_training.csv`)
+* A fixed random seed (42) for the train/test split and model
+* Version-controlled notebooks and source code
+* A saved model artifact (`models/heat_risk_model.joblib`)
+* A documented Model Card (`docs/model_card.md`)
+
+Re-running `notebooks/04-heat-risk-modelling.ipynb` regenerates the Random Forest model from the training dataset.
+
+---
+
 # Future Work
 
 Planned future extensions include:
 
+* Session 6 — implementing the Manhattan Heat Mitigation Decision Support Tool, powered by the trained Heat Risk Prediction Model
 * NYC Heat Vulnerability Index comparison
 * Neighbourhood-level aggregation
 * Multi-year analysis
 * Seasonal comparisons
-* Interactive decision-support dashboards
+* Additional environmental predictors for the model
 * Urban heat intervention prioritisation tools
 
 ---

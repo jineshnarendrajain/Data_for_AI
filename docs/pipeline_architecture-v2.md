@@ -305,7 +305,7 @@ The pipeline was designed to be reproducible through:
 * Archived summary statistics
 * Transparent analytical rules
 
-No stochastic model training is used.
+The V2 analytical pipeline itself uses no stochastic model training. The heat risk outputs produced here are later used to train the Heat Risk Prediction Model (Random Forest Regressor), documented in [`model_card.md`](model_card.md) and reflected in Pipeline Architecture V3.
 
 ---
 

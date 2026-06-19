@@ -10,9 +10,9 @@ The workflow supports neighbourhood-scale heat mitigation planning by combining 
 
 ## Analysis Overview
 
-This project follows a rule-based analytical approach rather than a predictive machine learning workflow.
+The heat risk framework documented in this log follows a rule-based analytical approach. The resulting heat risk layer was subsequently used to train a predictive machine learning model (the **Heat Risk Prediction Model**, a Random Forest Regressor), which is documented separately in [`model_card.md`](model_card.md) and [`notebooks/04-heat-risk-modelling.ipynb`](../notebooks/04-heat-risk-modelling.ipynb).
 
-The objective is to identify areas that simultaneously exhibit:
+The objective of the rule-based stage is to identify areas that simultaneously exhibit:
 
 * High land surface temperature
 * Low vegetation density
@@ -208,7 +208,7 @@ The workflow was designed to be reproducible through:
 * Saved summary statistics
 * Deterministic analytical procedures
 
-No stochastic model training was used.
+The rule-based heat risk stage uses no stochastic model training. The downstream Heat Risk Prediction Model adds a reproducible machine learning stage using a fixed random seed (42) and a saved model artifact (`models/heat_risk_model.joblib`).
 
 ---
 
@@ -250,4 +250,4 @@ Top 10 Hotspot Samples
 
 Session 4 produced a reproducible urban heat hotspot identification workflow for Manhattan based on Landsat-derived land surface temperature and Sentinel-derived vegetation density.
 
-The resulting heat risk model establishes the analytical foundation for Session 5 evaluation and Session 6 decision-support development.
+The resulting heat risk framework establishes the analytical foundation for Session 5 model training and evaluation (the Heat Risk Prediction Model, documented in [`model_card.md`](model_card.md)), and Session 6 decision-support tool development.

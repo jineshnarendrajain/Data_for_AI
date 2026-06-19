@@ -10,7 +10,7 @@ Manhattan Urban Heat Hotspot Prioritisation
 
 The purpose of this evaluation is to assess whether the analytical workflow produces credible and useful evidence for identifying relative urban heat hotspots across Manhattan.
 
-Unlike predictive machine learning projects, this evaluation focuses on the validity of derived conclusions rather than prediction accuracy.
+This evaluation focuses on the validity of the derived heat risk conclusions rather than on prediction accuracy. The predictive accuracy of the downstream Heat Risk Prediction Model (Random Forest Regressor) is assessed separately in [`model_card.md`](model_card.md).
 
 ---
 
@@ -158,4 +158,4 @@ The system should be viewed as a decision-support tool rather than an operationa
 
 ## Recommendation
 
-Proceed to Session 6 development with the current workflow while documenting the need for future validation against external vulnerability datasets.
+Proceed to Session 6 development of the Manhattan Heat Mitigation Decision Support Tool — powered by the trained Heat Risk Prediction Model — while documenting the need for future validation against external vulnerability datasets.

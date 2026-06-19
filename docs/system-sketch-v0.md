@@ -10,6 +10,8 @@ The analytical workflow integrates Land Surface Temperature (LST) and vegetation
 
 The system is designed as a transparent and reproducible geospatial analysis pipeline rather than a predictive machine learning system.
 
+> **Update:** This v0 sketch captures the original rule-based design. The project was subsequently extended with the Heat Risk Prediction Model (a Random Forest Regressor trained on the heat risk outputs), documented in [`model_card.md`](model_card.md).
+
 ---
 
 ## Pipeline Diagram
